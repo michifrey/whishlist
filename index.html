@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Wunschliste</title>
+  <meta name="description" content="Meine aktuelle Wunschliste für Weihnachten und Geburtstag – mit Bildern und Links zu den Shops.">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='8' fill='%23F2613F'/><path d='M7 14h18v11H7zM5 10h22v4H5zM16 10v15' fill='none' stroke='white' stroke-width='2.2' stroke-linejoin='round'/><path d='M16 10c-2-4-6-4-6-1.5S16 10 16 10s6 1 6-1.5-4-2.5-6 1.5z' fill='white'/></svg>">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/style.css?v=__VERSION__">
+</head>
+<body>
+  <div class="app">
+    <aside class="sidebar">
+      <a class="brand" href="#">
+        <span class="brand__mark" aria-hidden="true">
+          <svg width="20" height="20" viewBox="0 0 24 24"><path d="M4 11h16v10H4zM3 7h18v4H3zM12 7v14"/><path d="M12 7C10 3 6.5 3.5 7 5.5S12 7 12 7s4.5-.5 5-1.5S14 3 12 7z"/></svg>
+        </span>
+        <span id="brand-name">Wunschliste</span>
+      </a>
+      <a class="feature" id="feature" href="#">
+        <span class="feature__icon" aria-hidden="true">
+          <svg width="20" height="20" viewBox="0 0 24 24"><path d="M12 20.5s-8-4.7-8-10.6A4.4 4.4 0 0 1 12 7.3a4.4 4.4 0 0 1 8 2.6c0 5.9-8 10.6-8 10.6z"/></svg>
+        </span>
+        <span><strong id="feature-title">Wunschliste</strong><small id="feature-date"></small></span>
+      </a>
+      <nav class="nav" id="categories" aria-label="Kategorie"></nav>
+      <div class="side-group">
+        <p class="side-label">Budget</p>
+        <div class="topics" id="budgets" role="group" aria-label="Budget"></div>
+      </div>
+    </aside>
+
+    <div class="main">
+      <header class="topbar">
+        <label class="search">
+          <svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+          <input id="search" type="search" placeholder="Wunsch, Marke oder Shop suchen" autocomplete="off">
+          <kbd>/</kbd>
+        </label>
+        <button class="icon-btn" data-theme-toggle type="button" aria-label="Farbschema wechseln">
+          <svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 14.5A8 8 0 0 1 9.5 4 8 8 0 1 0 20 14.5z"/></svg>
+        </button>
+      </header>
+
+      <div id="list-view">
+        <div id="stale"></div>
+        <section id="hero" class="hero" aria-label="Über diese Liste"></section>
+
+        <div class="toolbar">
+          <div>
+            <h1 class="toolbar__title" id="list-title">Alle Wünsche</h1>
+            <p class="count" id="count" aria-live="polite"></p>
+          </div>
+          <div class="controls">
+            <select id="sort" aria-label="Sortierung">
+              <option value="priority">Wichtigste zuerst</option>
+              <option value="price-asc">Preis aufsteigend</option>
+              <option value="price-desc">Preis absteigend</option>
+              <option value="title">Name A–Z</option>
+            </select>
+            <div class="segmented" role="group" aria-label="Ansicht">
+              <button type="button" data-view="shelves" aria-pressed="true">Kategorien</button>
+              <button type="button" data-view="grid" aria-pressed="false">Raster</button>
+            </div>
+          </div>
+        </div>
+
+        <div id="results"></div>
+      </div>
+
+      <div id="detail-view" hidden>
+        <a class="back" id="back" href="#">
+          <svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><path d="M15 18l-6-6 6-6"/></svg>
+          Zurück zur Liste
+        </a>
+        <article class="page" id="page"></article>
+      </div>
+
+      <footer class="footer" id="footer"></footer>
+    </div>
+
+    <aside class="rail" id="rail" aria-label="Übersicht"></aside>
+  </div>
+
+  <script src="assets/app.js?v=__VERSION__" type="module"></script>
+</body>
+</html>

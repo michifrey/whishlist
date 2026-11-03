@@ -1,0 +1,93 @@
+{
+  "owner": "Michi",
+  "year": 2026,
+  "updated": "2026-11-03",
+  "intro": "Ihr habt gefragt, was ich mir zu Weihnachten oder zum Geburtstag wünsche – hier ist meine aktuelle Liste. Ein Klick auf einen Wunsch zeigt Details und wo es ihn zu kaufen gibt.",
+  "notes": [
+    { "label": "Kleidergrösse", "value": "L" },
+    { "label": "Schuhgrösse", "value": "43" },
+    { "label": "Lieblingsfarben", "value": "Dunkelblau, Grün" }
+  ],
+  "categories": [
+    { "id": "buecher", "label": "Bücher", "icon": "book" },
+    { "id": "technik", "label": "Technik", "icon": "tech" },
+    { "id": "musik", "label": "Musik", "icon": "music" },
+    { "id": "kueche", "label": "Küche & Genuss", "icon": "cup" },
+    { "id": "freizeit", "label": "Freizeit & Spiele", "icon": "puzzle" },
+    { "id": "kleidung", "label": "Kleidung", "icon": "shirt" },
+    { "id": "erlebnisse", "label": "Erlebnisse & Gutscheine", "icon": "ticket" }
+  ],
+  "items": [
+    {
+      "id": "kopfhoerer",
+      "title": "Kabellose Kopfhörer mit Noise Cancelling",
+      "brand": "Sony WH-1000XM5",
+      "category": "technik",
+      "priority": 1,
+      "price": 299,
+      "note": "Am liebsten in Schwarz.",
+      "shops": [
+        { "name": "Galaxus", "url": "https://www.galaxus.ch/de/search?q=Sony%20WH-1000XM5" },
+        { "name": "Interdiscount", "url": "https://www.interdiscount.ch/de/search?search=Sony%20WH-1000XM5" }
+      ]
+    },
+    {
+      "id": "herr-der-ringe",
+      "title": "Der Herr der Ringe – illustrierte Ausgabe",
+      "brand": "J. R. R. Tolkien",
+      "category": "buecher",
+      "priority": 2,
+      "price": 69,
+      "shops": [
+        { "name": "Orell Füssli", "url": "https://www.orellfuessli.ch/suche?sq=Herr%20der%20Ringe%20illustriert" },
+        { "name": "Ex Libris", "url": "https://www.exlibris.ch/de/suche/?q=Herr%20der%20Ringe%20illustriert" }
+      ],
+      "related": ["notizbuch"]
+    },
+    {
+      "id": "notizbuch",
+      "title": "Notizbuch A5, gepunktet",
+      "brand": "Leuchtturm1917",
+      "category": "buecher",
+      "priority": 3,
+      "price": 25,
+      "note": "Farbe egal – gerne Dunkelblau oder Grün.",
+      "shops": [
+        { "name": "Galaxus", "url": "https://www.galaxus.ch/de/search?q=Leuchtturm1917%20A5%20dotted" }
+      ]
+    },
+    {
+      "id": "kochbuch",
+      "title": "Schokolade – das Kochbuch",
+      "category": "kueche",
+      "priority": 3,
+      "price": 35,
+      "shops": [
+        { "name": "Orell Füssli", "url": "https://www.orellfuessli.ch/suche?sq=Schokolade%20Kochbuch" }
+      ]
+    },
+    {
+      "id": "brettspiel",
+      "title": "Brettspiel für Spieleabende",
+      "brand": "Catan – Das Spiel",
+      "category": "freizeit",
+      "priority": 2,
+      "price": 45,
+      "shops": [
+        { "name": "Galaxus", "url": "https://www.galaxus.ch/de/search?q=Catan%20Basisspiel" },
+        { "name": "Franz Carl Weber", "url": "https://www.fcw.ch/de/search?q=Catan" }
+      ]
+    },
+    {
+      "id": "escape-room",
+      "title": "Escape-Room-Gutschein für 2 Personen",
+      "category": "erlebnisse",
+      "priority": 2,
+      "price": 80,
+      "note": "Gerne zusammen mit euch – das ist das eigentliche Geschenk!",
+      "shops": [
+        { "name": "Erlebnisgeschenke", "url": "https://www.erlebnisgeschenke.ch/suche?q=escape%20room" }
+      ]
+    }
+  ]
+}

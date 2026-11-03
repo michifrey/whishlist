@@ -1,0 +1,37 @@
+name: Deploy to GitHub Pages
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Validate data
+        run: python3 -c "import json; d=json.load(open('data/wishlist.json')); print(len(d['items']), 'wishes OK for', d['owner'], d['year'])"
+      - name: Fetch product images from the shops
+        run: python3 tools/fetch_images.py
+        continue-on-error: true
+      - name: Stamp asset versions (cache busting)
+        run: sed -i "s/__VERSION__/${GITHUB_SHA::7}/g" index.html
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: .
+      - id: deployment
+        uses: actions/deploy-pages@v4
