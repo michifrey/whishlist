@@ -2,6 +2,7 @@
   "owner": "Michi",
   "year": 2026,
   "updated": "2026-11-03",
+  "reservations": { "url": "" },
   "intro": "Ihr habt gefragt, was ich mir zu Weihnachten oder zum Geburtstag wünsche – hier ist meine aktuelle Liste. Ein Klick auf einen Wunsch zeigt Details und wo es ihn zu kaufen gibt.",
   "notes": [
     { "label": "Kleidergrösse", "value": "L" },

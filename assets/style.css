@@ -408,3 +408,44 @@ a.type-pill { text-decoration: none; }
   .thumb__ph span { font-size: .92rem; -webkit-line-clamp: 3; }
   .thumb--big .thumb__ph span { font-size: 1.4rem; }
 }
+
+/* ---------- Reservations ---------- */
+.toggle {
+  border: 1px solid var(--border); background: var(--surface); border-radius: 12px;
+  padding: 9px 14px; cursor: pointer; font-weight: 600; font-size: .88rem; color: var(--muted);
+}
+.toggle[aria-pressed="true"] { background: var(--text); border-color: var(--text); color: var(--bg); }
+.wish.is-reserved .thumb__img, .wish.is-reserved .thumb__ph { filter: grayscale(.85); opacity: .55; }
+.wish.is-reserved .wish__title, .wish.is-reserved .wish__meta { opacity: .6; }
+.thumb__badge--done { background: var(--text); color: var(--bg); }
+.thumb__badge--done svg { fill: none; stroke: currentColor; stroke-width: 2.4; }
+.notice--owner svg { color: var(--muted); }
+.notice > span { flex: 1; min-width: 200px; }
+.notice { justify-content: flex-start; }
+.notice .btn { margin-left: auto; }
+
+.reserve {
+  margin-top: 22px; padding: 18px 20px; border-radius: 18px; max-width: 620px;
+  background: var(--accent-soft); display: flex; flex-direction: column; gap: 14px;
+}
+.reserve__head { display: grid; grid-template-columns: 24px 1fr; gap: 12px; }
+.reserve__head svg { width: 22px; height: 22px; color: var(--accent); margin-top: 2px; }
+.reserve__head strong { font-weight: 800; }
+.reserve__head p, .reserve > p { margin: 2px 0 0; font-size: .9rem; color: var(--muted); }
+.reserve__row { display: flex; flex-wrap: wrap; gap: 10px; }
+.reserve__row input {
+  flex: 1 1 180px; min-width: 0; padding: 11px 14px; border-radius: 12px;
+  border: 1px solid var(--border); background: var(--surface);
+}
+.reserve__row input:focus { outline: none; border-color: var(--accent); }
+.reserve__msg { margin: 0; font-weight: 700; font-size: .9rem; }
+.reserve .btn { align-self: flex-start; }
+.reserve .btn[disabled] { opacity: .6; cursor: progress; }
+.reserve--mine { background: hsl(145 50% 92%); }
+.reserve--mine .reserve__head svg { color: hsl(145 55% 32%); stroke-width: 2.4; }
+.reserve--taken, .reserve--muted { background: var(--surface-2); }
+.reserve--taken .reserve__head svg { color: var(--muted); }
+.reserve--muted { flex-direction: row; align-items: center; color: var(--muted); }
+.reserve--muted p { margin: 0; }
+:root[data-theme="dark"] .reserve--mine { background: hsl(145 30% 16%); }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .reserve--mine { background: hsl(145 30% 16%); } }

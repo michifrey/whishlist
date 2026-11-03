@@ -1,6 +1,6 @@
 const $ = (sel) => document.querySelector(sel);
 
-const state = { category: "all", budget: "all", query: "", sort: "priority", view: "shelves" };
+const state = { category: "all", budget: "all", query: "", sort: "priority", view: "shelves", free: false };
 
 let data = { categories: [], items: [], notes: [] };
 const categoryById = new Map();
@@ -37,6 +37,9 @@ const ICON_PATHS = {
   info: '<circle cx="12" cy="12" r="9"/><path d="M12 11v5M12 8h.01"/>',
   arrow: '<path d="M7 17 17 7M9 7h8v8"/>',
   link: '<path d="M10 14a5 5 0 0 0 7 0l3-3a5 5 0 0 0-7-7l-1 1"/><path d="M14 10a5 5 0 0 0-7 0l-3 3a5 5 0 0 0 7 7l1-1"/>',
+  check: '<path d="M20 6 9 17l-5-5"/>',
+  lock: '<rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/>',
+  eyeoff: '<path d="M3 3l18 18M10.6 5.1A9.8 9.8 0 0 1 12 5c6 0 9.5 7 9.5 7a17 17 0 0 1-3 3.8M6.6 6.6A16.6 16.6 0 0 0 2.5 12S6 19 12 19a9.6 9.6 0 0 0 5.4-1.6M9.9 9.9a3 3 0 0 0 4.2 4.2"/>',
 };
 const icon = (name, cls = "") =>
   `<svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true" class="${cls}">${ICON_PATHS[name] ?? ICON_PATHS.gift}</svg>`;
@@ -74,13 +77,103 @@ const priceText = (item) => {
   return p === null ? "" : `${item.priceFrom || (item.shops?.length ?? 0) > 1 ? "ab " : "ca. "}${chf(p)}`;
 };
 
+/* ---------- Reservations ("Ich besorge das") ---------- */
+// Stored in a Google Sheet via a small Apps Script (tools/reservations.gs).
+// Keys carry the year, so last year's reservations don't block this year's list.
+
+const store = {
+  get(k) { try { return localStorage.getItem(k); } catch { return null; } },
+  set(k, v) { try { v === null ? localStorage.removeItem(k) : localStorage.setItem(k, v); } catch {} },
+};
+
+const res = {
+  url: "",
+  status: "off", // off | loading | ready | error
+  list: {},
+  busy: false,
+  message: "",
+  token: store.get("wishlist:token"),
+  mine: new Set(JSON.parse(store.get("wishlist:mine") || "[]")),
+};
+if (!res.token) {
+  res.token = (crypto.randomUUID?.() ?? `${Date.now()}-${Math.random()}-${Math.random()}`).replace(/[^\w-]/g, "");
+  store.set("wishlist:token", res.token);
+}
+
+// The owner shouldn't see what has been reserved: "#ich" switches that off in their browser.
+const isOwner = () => store.get("wishlist:owner") === "1";
+const resKey = (item) => `${data.year}:${item.id}`;
+const resActive = () => res.url && !isOwner();
+const reservation = (item) => (resActive() && res.status === "ready" ? res.list[resKey(item)] ?? null : null);
+const isMine = (item) => res.mine.has(resKey(item));
+
+function saveMine() { store.set("wishlist:mine", JSON.stringify([...res.mine])); }
+
+async function loadReservations() {
+  if (!resActive()) return;
+  if (res.status !== "ready") res.status = "loading";
+  try {
+    const r = await fetch(`${res.url}?action=list&t=${Date.now()}`);
+    const json = await r.json();
+    if (!json.ok) throw new Error(json.error);
+    res.list = json.reservations ?? {};
+    res.status = "ready";
+    // Forget own reservations the owner cleared in the sheet.
+    res.mine.forEach((k) => !res.list[k] && res.mine.delete(k));
+    saveMine();
+  } catch (err) {
+    console.error(err);
+    if (res.status !== "ready") res.status = "error";
+  }
+  rerender();
+}
+
+async function changeReservation(item, action, name = "") {
+  res.busy = true;
+  res.message = "";
+  rerender();
+  const key = resKey(item);
+  try {
+    // text/plain keeps this a "simple" request, which Apps Script accepts cross-origin.
+    const r = await fetch(res.url, {
+      method: "POST",
+      headers: { "Content-Type": "text/plain;charset=utf-8" },
+      body: JSON.stringify({ action, key, name, token: res.token }),
+    });
+    const json = await r.json();
+    if (json.ok || json.error === "already-yours") {
+      action === "reserve" ? res.mine.add(key) : res.mine.delete(key);
+      saveMine();
+      if (action === "reserve" && name) store.set("wishlist:name", name);
+      res.message = action === "reserve" ? "reserved" : "released";
+    } else {
+      res.message = json.error === "taken" ? "taken" : json.error === "not-yours" ? "not-yours" : "failed";
+    }
+  } catch (err) {
+    console.error(err);
+    res.message = "failed";
+  }
+  res.busy = false;
+  await loadReservations();
+}
+
+function rerender() {
+  const m = location.hash.match(/^#\/(.+)$/);
+  const item = m && itemById.get(decodeURIComponent(m[1]));
+  if (item && !$("#detail-view").hidden) renderDetail(item, { keepScroll: true });
+  else if (!$("#list-view").hidden) renderList();
+}
+
 /* ---------- Images (from the shop; placeholder tile otherwise) ---------- */
 
 function thumb(item, cls = "") {
-  return `<div class="thumb ${cls}" style="--h:${hue(item.id)}">
+  const taken = reservation(item);
+  return `<div class="thumb ${cls} ${taken ? "is-reserved" : ""}" style="--h:${hue(item.id)}">
     <div class="thumb__ph">${icon(categoryIcon(item.category))}<span>${esc(item.title)}</span></div>
     ${item.image ? `<img class="thumb__img" src="${esc(item.image)}" alt="" loading="lazy" decoding="async" referrerpolicy="no-referrer" onload="this.parentNode.classList.add('has-img')" onerror="this.remove()">` : ""}
-    ${priorityOf(item) === 1 ? `<span class="thumb__badge">${icon("heart")} Top-Wunsch</span>` : ""}
+    ${taken
+      ? `<span class="thumb__badge thumb__badge--done">${icon(isMine(item) ? "check" : "lock")} ${isMine(item) ? "Von dir reserviert" : "Reserviert"}</span>`
+      : priorityOf(item) === 1 ? `<span class="thumb__badge">${icon("heart")} Top-Wunsch</span>` : ""}
   </div>`;
 }
 
@@ -94,6 +187,7 @@ function readHash() {
   state.query = p.get("q") || "";
   state.sort = p.get("sort") || "priority";
   state.view = p.get("view") || "shelves";
+  state.free = p.get("frei") === "1";
 }
 
 function stateToHash() {
@@ -103,6 +197,7 @@ function stateToHash() {
   if (state.query) p.set("q", state.query);
   if (state.sort !== "priority") p.set("sort", state.sort);
   if (state.view !== "shelves") p.set("view", state.view);
+  if (state.free) p.set("frei", "1");
   return p.toString();
 }
 
@@ -128,9 +223,11 @@ function haystack(item) {
 }
 const matchesQuery = (item) =>
   !state.query || normalize(state.query).split(/\s+/).filter(Boolean).every((w) => haystack(item).includes(w));
-const matches = (item) => inCategory(item) && inBudget(item) && matchesQuery(item);
+const matches = (item) => inCategory(item) && inBudget(item) && matchesQuery(item) && !(state.free && reservation(item));
 
 const byPrice = (dir) => (a, b) => ((priceOf(a) ?? 1e9) - (priceOf(b) ?? 1e9)) * dir;
+// Reserved wishes always go to the end, so the free ones are seen first.
+const freeFirst = (sort) => (a, b) => Boolean(reservation(a)) - Boolean(reservation(b)) || sort(a, b);
 const sorters = {
   priority: (a, b) => priorityOf(a) - priorityOf(b) || byPrice(1)(a, b),
   "price-asc": byPrice(1),
@@ -142,7 +239,7 @@ const sorters = {
 
 function card(item) {
   const shop = item.shops?.[0]?.name;
-  return `<a class="wish" href="#/${item.id}">
+  return `<a class="wish ${reservation(item) ? "is-reserved" : ""}" href="#/${item.id}">
     ${thumb(item)}
     <div>
       <h3 class="wish__title">${esc(item.title)}</h3>
@@ -193,10 +290,16 @@ function renderSidebar() {
 function renderStale() {
   // An old list should say so, so nobody buys from last year's wishes.
   const now = new Date().getFullYear();
-  $("#stale").innerHTML = data.year < now
+  $("#stale").innerHTML = (data.year < now
     ? `<div class="notice">${icon("info")}<span>Diese Liste ist von ${data.year} – fragt ${esc(data.owner)} am besten kurz nach, ob sie noch aktuell ist.</span></div>`
-    : "";
+    : "") + ownerNotice() + (resActive() && res.status === "error"
+    ? `<div class="notice">${icon("info")}<span>Reservierungen konnten gerade nicht geladen werden.</span><button type="button" class="btn" data-action="retry">Nochmals versuchen</button></div>`
+    : "");
 }
+
+const ownerNotice = () => res.url && isOwner()
+  ? `<div class="notice notice--owner">${icon("eyeoff")}<span>Überraschungsmodus: Du siehst nicht, was schon reserviert ist.</span><button type="button" class="btn" data-action="owner-off">Reservierungen anzeigen</button></div>`
+  : "";
 
 function renderHero() {
   const hero = $("#hero");
@@ -204,7 +307,7 @@ function renderHero() {
     hero.hidden = true;
     return;
   }
-  const top = [...data.items].sort(sorters.priority);
+  const top = [...data.items].sort(freeFirst(sorters.priority));
   const pick = top.find((i) => i.image) ?? top[0];
   hero.hidden = false;
   hero.innerHTML = `
@@ -216,7 +319,8 @@ function renderHero() {
         `<div><dt>${esc(n.label)}</dt><dd>${esc(n.value)}</dd></div>`).join("")}</dl>` : ""}
       <div class="hero__actions">
         <span class="stamp">${icon("info")} Stand: ${dateLabel(data.updated)}</span>
-        <span class="hero__count">${wishCount(data.items.length)}</span>
+        <span class="hero__count">${wishCount(data.items.length)}${res.status === "ready" && resActive()
+          ? ` · ${data.items.filter((i) => !reservation(i)).length} noch frei` : ""}</span>
       </div>
     </div>
     ${pick ? `<a class="hero__cover" href="#/${pick.id}" tabindex="-1" aria-hidden="true">${thumb(pick)}</a>` : ""}`;
@@ -231,9 +335,13 @@ function listTitle() {
 }
 
 function renderResults() {
-  const list = data.items.filter(matches).sort(sorters[state.sort] ?? sorters.priority);
+  const list = data.items.filter(matches).sort(freeFirst(sorters[state.sort] ?? sorters.priority));
   $("#list-title").textContent = listTitle();
-  $("#count").textContent = wishCount(list.length);
+  const taken = list.filter((i) => reservation(i)).length;
+  $("#count").textContent = `${wishCount(list.length)}${taken ? ` · ${taken} reserviert` : ""}`;
+  const freeBtn = $("#free-toggle");
+  freeBtn.hidden = !resActive() || res.status !== "ready";
+  freeBtn.setAttribute("aria-pressed", state.free);
 
   if (!list.length) {
     $("#results").innerHTML = `<div class="empty">
@@ -255,7 +363,7 @@ function renderResults() {
 }
 
 function renderRail() {
-  const top = data.items.filter((i) => priorityOf(i) === 1).sort(sorters.priority).slice(0, 5);
+  const top = data.items.filter((i) => priorityOf(i) === 1 && !reservation(i)).sort(sorters.priority).slice(0, 5);
   const counts = BUDGETS.map((b) => ({ b, n: data.items.filter((i) => inBudget(i, b.id)).length }));
   const max = Math.max(1, ...counts.map((c) => c.n));
   $("#rail").innerHTML = `
@@ -273,8 +381,10 @@ function renderRail() {
       </button>`).join("")}</div>
     </div>
     <div class="rail__card rail__card--soft">
-      <h2>Kleiner Tipp</h2>
-      <p class="rail__text">Damit nichts doppelt geschenkt wird: sprecht euch kurz untereinander ab, wer was besorgt.</p>
+      <h2>So geht's</h2>
+      <p class="rail__text">${resActive()
+        ? "Wunsch anklicken und „Ich besorge das“ wählen – dann sehen die anderen, dass er schon vergeben ist. " + esc(data.owner) + " sieht das nicht."
+        : "Damit nichts doppelt geschenkt wird: sprecht euch kurz untereinander ab, wer was besorgt."}</p>
     </div>`;
 }
 
@@ -299,7 +409,7 @@ function relatedItems(item) {
   return [...ids].map((id) => itemById.get(id)).filter(Boolean);
 }
 
-function renderDetail(item) {
+function renderDetail(item, { keepScroll = false } = {}) {
   const related = relatedItems(item);
   const skip = new Set([item.id, ...related.map((r) => r.id)]);
   const more = data.items.filter((o) => o.category === item.category && !skip.has(o.id)).sort(sorters.priority);
@@ -329,6 +439,7 @@ function renderDetail(item) {
           <button type="button" class="btn" data-action="share">${icon("link")} Link kopieren</button>
         </div>
         ${shops.length ? `<p class="page__hint">Preise sind ungefähr – im Shop gilt der aktuelle Preis.</p>` : ""}
+        ${reserveBox(item)}
       </div>
     </section>
 
@@ -337,6 +448,49 @@ function renderDetail(item) {
 
   document.title = `${item.title} · ${title()}`;
   $("#back").href = `#${listHash}`;
+  if (!keepScroll) res.message = "";
+}
+
+const RES_MESSAGES = {
+  reserved: "Danke! Der Wunsch ist jetzt für dich reserviert.",
+  released: "Reservierung aufgehoben – der Wunsch ist wieder frei.",
+  taken: "Da war jemand schneller – dieser Wunsch ist schon reserviert.",
+  "not-yours": "Diese Reservierung wurde in einem anderen Browser gemacht und kann nur dort aufgehoben werden.",
+  failed: "Das hat leider nicht geklappt. Bitte versuch es nochmals.",
+};
+
+function reserveBox(item) {
+  if (!res.url) return "";
+  if (isOwner()) return `<div class="reserve reserve--muted">${icon("eyeoff")}<p>Überraschungsmodus – Reservierungen sind ausgeblendet.</p></div>`;
+  const msg = res.message ? `<p class="reserve__msg">${esc(RES_MESSAGES[res.message] ?? "")}</p>` : "";
+  if (res.status === "loading" || res.status === "off") return `<div class="reserve reserve--muted"><p>Reservierungen werden geladen …</p></div>`;
+  if (res.status === "error") return `<div class="reserve reserve--muted"><p>Reservierungen konnten nicht geladen werden.</p>
+    <button type="button" class="btn" data-action="retry">Nochmals versuchen</button></div>`;
+
+  const r = reservation(item);
+  if (r && isMine(item)) {
+    return `<div class="reserve reserve--mine">
+      <div class="reserve__head">${icon("check")}<div><strong>Du besorgst das.</strong><p>Die anderen sehen, dass der Wunsch vergeben ist – ${esc(data.owner)} nicht.</p></div></div>
+      ${msg}
+      <button type="button" class="btn" data-action="release" ${res.busy ? "disabled" : ""}>Reservierung aufheben</button>
+    </div>`;
+  }
+  if (r) {
+    return `<div class="reserve reserve--taken">
+      <div class="reserve__head">${icon("lock")}<div><strong>Schon reserviert${r.name ? ` von ${esc(r.name)}` : ""}.</strong>
+      <p>Diesen Wunsch besorgt schon jemand – such dir am besten einen anderen aus.</p></div></div>
+      ${msg}
+    </div>`;
+  }
+  return `<form class="reserve" data-reserve>
+    <div class="reserve__head">${icon("gift")}<div><strong>Möchtest du das schenken?</strong>
+    <p>Reserviere den Wunsch, damit ihn niemand doppelt kauft. ${esc(data.owner)} sieht nicht, wer was reserviert hat.</p></div></div>
+    ${msg}
+    <div class="reserve__row">
+      <input name="name" maxlength="40" autocomplete="given-name" placeholder="Dein Name (optional)" value="${esc(store.get("wishlist:name") ?? "")}" aria-label="Dein Name (optional)">
+      <button type="submit" class="btn btn--primary" ${res.busy ? "disabled" : ""}>${icon("gift")} ${res.busy ? "Einen Moment …" : "Ich besorge das"}</button>
+    </div>
+  </form>`;
 }
 
 /* ---------- Routing ---------- */
@@ -344,6 +498,10 @@ function renderDetail(item) {
 const title = () => `${data.owner}s Wunschliste ${data.year}`;
 
 function route() {
+  if (location.hash === "#ich") {
+    store.set("wishlist:owner", "1");
+    history.replaceState(null, "", location.pathname + location.search);
+  }
   const m = location.hash.match(/^#\/(.+)$/);
   const item = m && itemById.get(decodeURIComponent(m[1]));
   const detail = Boolean(item);
@@ -422,6 +580,34 @@ function bind() {
     renderList();
   });
 
+  $("#page").addEventListener("submit", (e) => {
+    const form = e.target.closest("[data-reserve]");
+    if (!form || res.busy) return;
+    e.preventDefault();
+    const item = itemById.get(decodeURIComponent(location.hash.slice(2)));
+    if (item) changeReservation(item, "reserve", form.elements.name.value.trim());
+  });
+
+  document.addEventListener("click", (e) => {
+    const b = e.target.closest("[data-action=release],[data-action=retry],[data-action=owner-off]");
+    if (!b) return;
+    if (b.dataset.action === "retry") { res.status = "loading"; rerender(); return loadReservations(); }
+    if (b.dataset.action === "owner-off") {
+      if (!confirm("Damit siehst du, welche Wünsche schon reserviert sind – die Überraschung ist dann weg. Trotzdem anzeigen?")) return;
+      store.set("wishlist:owner", null);
+      res.status = "loading";
+      rerender();
+      return loadReservations();
+    }
+    const item = itemById.get(decodeURIComponent(location.hash.slice(2)));
+    if (item && !res.busy && confirm("Reservierung wirklich aufheben?")) changeReservation(item, "release");
+  });
+
+  $("#free-toggle").addEventListener("click", () => { state.free = !state.free; renderList(); });
+
+  // Pick up reservations others made while this tab was in the background.
+  document.addEventListener("visibilitychange", () => document.visibilityState === "visible" && loadReservations());
+
   $("#page").addEventListener("click", async (e) => {
     const share = e.target.closest("[data-action=share]");
     if (!share) return;
@@ -470,8 +656,11 @@ async function init() {
   $("#feature-date").textContent = `Stand: ${dateLabel(data.updated)}`;
   $("#footer").innerHTML = `${esc(title())} · Bilder und Preise von den jeweiligen Shops, Stand ${dateLabel(data.updated)}`;
 
+  res.url = data.reservations?.url ?? "";
+
   bind();
   route();
+  loadReservations();
 }
 
 init();

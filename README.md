@@ -10,6 +10,8 @@ Meine persönliche Wunschliste für Weihnachten und Geburtstag – für Familie 
 - Filter nach Kategorie und **Budget** (bis 25 · 25–50 · 50–100 · über 100 CHF), Suche, Sortierung nach Wichtigkeit oder Preis
 - Detailseite (`#/<id>`) mit grossem Bild, Hinweis („am liebsten in Schwarz“) und **Buttons zu jedem Shop**
 - Teilbare Links, Hell/Dunkel-Modus, mobil optimiert
+- **„Ich besorge das“**: Wer etwas schenken will, reserviert den Wunsch. Die anderen sehen ihn dann als „Reserviert“ (mit Namen, falls angegeben) – so wird nichts doppelt gekauft. Aufheben kann nur, wer reserviert hat.
+- **Überraschungsmodus** für mich: einmal `…/#ich` öffnen, dann blendet die Seite in diesem Browser alle Reservierungen aus.
 
 ## Wünsche pflegen
 
@@ -53,6 +55,28 @@ Lokal ausprobieren (speichert die Bilder und trägt sie in die JSON ein):
 python3 tools/fetch_images.py
 ```
 
+## Reservierungen einrichten (einmalig, ca. 5 Minuten)
+
+Die Reservierungen liegen in einem Google Sheet in meinem Google-Konto. Die Besucher brauchen kein Konto.
+
+1. Neues Google Sheet anlegen, z. B. „Wunschliste Reservierungen“.
+2. Im Sheet **Erweiterungen → Apps Script** öffnen, den Inhalt von [`tools/reservations.gs`](tools/reservations.gs) hineinkopieren und speichern.
+3. **Bereitstellen → Neue Bereitstellung → Typ: Web-App**
+   - Ausführen als: **Ich**
+   - Zugriff: **Jeder**
+   → Bereitstellen, Zugriff erlauben, die **Web-App-URL** (endet auf `/exec`) kopieren.
+4. In [`data/wishlist.json`](data/wishlist.json) eintragen:
+   ```json
+   "reservations": { "url": "https://script.google.com/macros/s/…/exec" }
+   ```
+5. Committen und pushen. Ohne URL bleibt die Seite wie bisher, nur ohne Reservieren-Knopf.
+
+Gut zu wissen:
+- Das Sheet zeigt alle Reservierungen – um die Überraschung nicht zu verderben, einfach nicht hineinschauen. 🙂
+- Eine Reservierung lässt sich nur im selben Browser aufheben, in dem sie gemacht wurde. Notfalls die Zeile im Sheet löschen.
+- Reservierungen gelten pro Jahr: Mit einem neuen `year` ist die Liste wieder komplett frei.
+- Wird `reservations.gs` geändert: **Bereitstellen → Bereitstellungen verwalten → Bearbeiten → Neue Version**, damit die URL gleich bleibt.
+
 ## Lokal ansehen
 
 ```bash
@@ -68,5 +92,5 @@ python3 -m http.server 8000
 
 ## Ideen
 
-- [ ] „Ich besorge das“ reservieren, damit nichts doppelt geschenkt wird (braucht einen kleinen Speicher, z. B. ein Formular)
+- [x] „Ich besorge das“ reservieren, damit nichts doppelt geschenkt wird
 - [ ] Mehrere Listen (z. B. für die Kinder)
