@@ -5,7 +5,7 @@ Meine persönliche Wunschliste für Weihnachten und Geburtstag – für Familie 
 ## Was die Seite zeigt
 
 - Oben gross **Name und Jahr** („Michis Wunschliste 2026“) und das Datum der letzten Änderung – so sieht man sofort, dass die Liste aktuell ist. Ist das Jahr vorbei, erscheint ein Hinweis, lieber kurz nachzufragen.
-- Grössen und Lieblingsfarben (`notes`) direkt im Kopf der Seite
+- Optional Grössen oder Lieblingsfarben (`notes`, z. B. `[{"label": "Kleidergrösse", "value": "L"}]`) im Kopf der Seite
 - Karten mit **Produktbild aus dem Shop**, Preis und Shop
 - Filter nach Kategorie und **Budget** (bis 25 · 25–50 · 50–100 · über 100 CHF), Suche, Sortierung nach Wichtigkeit oder Preis
 - Detailseite (`#/<id>`) mit grossem Bild, Hinweis („am liebsten in Schwarz“) und **Buttons zu jedem Shop**

@@ -32,6 +32,8 @@ const ICON_PATHS = {
   puzzle: '<path d="M4 7h4a2 2 0 1 1 4 0h4v4a2 2 0 1 1 0 4v4h-4a2 2 0 1 0-4 0H4v-4a2 2 0 1 0 0-4z"/>',
   shirt: '<path d="m8 3-5 3 2 4 2-1v12h10V9l2 1 2-4-5-3a4 4 0 0 1-8 0z"/>',
   ticket: '<path d="M3 8a2 2 0 0 0 0 4v0a2 2 0 0 1 0 4v2h18v-2a2 2 0 0 1 0-4 2 2 0 0 0 0-4V6H3z"/><path d="M14 6v12" stroke-dasharray="2 2"/>',
+  camera: '<path d="M4 7h3l2-3h6l2 3h3a1 1 0 0 1 1 1v11a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V8a1 1 0 0 1 1-1z"/><circle cx="12" cy="13" r="4"/>',
+  wine: '<path d="M8 2h8l-.4 6.5a3.6 3.6 0 0 1-7.2 0z"/><path d="M12 12v9M8 21h8"/>',
   heart: '<path d="M12 20.5s-8-4.7-8-10.6A4.4 4.4 0 0 1 12 7.3a4.4 4.4 0 0 1 8 2.6c0 5.9-8 10.6-8 10.6z"/>',
   cart: '<circle cx="9" cy="20" r="1.5"/><circle cx="18" cy="20" r="1.5"/><path d="M2 3h3l2.6 12.4a2 2 0 0 0 2 1.6h8.2a2 2 0 0 0 2-1.5L21.5 8H6"/>',
   info: '<circle cx="12" cy="12" r="9"/><path d="M12 11v5M12 8h.01"/>',
@@ -65,6 +67,8 @@ const BUDGETS = [
   { id: "o100", label: "Über CHF 100", test: (p) => p > 100 },
 ];
 const budgetById = new Map(BUDGETS.map((b) => [b.id, b]));
+// Budget filters only help once enough wishes carry a price.
+const budgetsUseful = () => data.items.filter((i) => priceOf(i) !== null).length >= 3;
 
 // Cheapest known price: shop-specific prices win over the item's own estimate.
 function priceOf(item) {
@@ -278,6 +282,7 @@ function renderSidebar() {
     })
     .join("");
 
+  $("#budgets").parentElement.hidden = !budgetsUseful() && state.budget === "all";
   const inCat = data.items.filter((i) => inCategory(i));
   $("#budgets").innerHTML = [{ id: "all", label: "Jedes Budget" }, ...BUDGETS]
     .map((b, idx) => `<button type="button" class="topic" data-budget="${b.id}" aria-pressed="${state.budget === b.id}">
@@ -374,12 +379,12 @@ function renderRail() {
         <div><strong>${esc(i.title)}</strong><span>${esc(priceText(i) || i.brand || "")}</span></div>
       </a></li>`).join("")}</ol>
     </div>` : ""}
-    <div class="rail__card">
+    ${budgetsUseful() ? `<div class="rail__card">
       <h2>Nach Budget</h2>
       <div class="mix">${counts.map(({ b, n }) => `<button type="button" class="mix__row" data-budget="${b.id}">
         <span>${esc(b.label.replace("CHF ", ""))}</span><span class="mix__bar"><i style="width:${(n / max) * 100}%"></i></span><span>${n}</span>
       </button>`).join("")}</div>
-    </div>
+    </div>` : ""}
     <div class="rail__card rail__card--soft">
       <h2>So geht's</h2>
       <p class="rail__text">${resActive()

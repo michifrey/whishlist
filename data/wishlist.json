@@ -2,92 +2,157 @@
   "owner": "Michi",
   "year": 2026,
   "updated": "2026-11-03",
-  "reservations": { "url": "" },
+  "reservations": {
+    "url": ""
+  },
   "intro": "Ihr habt gefragt, was ich mir zu Weihnachten oder zum Geburtstag wünsche – hier ist meine aktuelle Liste. Ein Klick auf einen Wunsch zeigt Details und wo es ihn zu kaufen gibt.",
-  "notes": [
-    { "label": "Kleidergrösse", "value": "L" },
-    { "label": "Schuhgrösse", "value": "43" },
-    { "label": "Lieblingsfarben", "value": "Dunkelblau, Grün" }
-  ],
   "categories": [
-    { "id": "buecher", "label": "Bücher", "icon": "book" },
-    { "id": "technik", "label": "Technik", "icon": "tech" },
-    { "id": "musik", "label": "Musik", "icon": "music" },
-    { "id": "kueche", "label": "Küche & Genuss", "icon": "cup" },
-    { "id": "freizeit", "label": "Freizeit & Spiele", "icon": "puzzle" },
-    { "id": "kleidung", "label": "Kleidung", "icon": "shirt" },
-    { "id": "erlebnisse", "label": "Erlebnisse & Gutscheine", "icon": "ticket" }
+    {
+      "id": "technik",
+      "label": "Technik & Werkzeug",
+      "icon": "tech"
+    },
+    {
+      "id": "fotografie",
+      "label": "Fotografie",
+      "icon": "camera"
+    },
+    {
+      "id": "konzerte",
+      "label": "Konzerte",
+      "icon": "music"
+    },
+    {
+      "id": "weine",
+      "label": "Weine",
+      "icon": "wine"
+    }
   ],
   "items": [
     {
-      "id": "kopfhoerer",
-      "title": "Kabellose Kopfhörer mit Noise Cancelling",
-      "brand": "Sony WH-1000XM5",
+      "id": "benq-screenbar",
+      "title": "Bildschirm-Leuchte",
+      "brand": "BenQ ScreenBar",
       "category": "technik",
-      "priority": 1,
-      "price": 299,
-      "note": "Am liebsten in Schwarz.",
       "shops": [
-        { "name": "Galaxus", "url": "https://www.galaxus.ch/de/search?q=Sony%20WH-1000XM5" },
-        { "name": "Interdiscount", "url": "https://www.interdiscount.ch/de/search?search=Sony%20WH-1000XM5" }
+        {
+          "name": "Galaxus",
+          "url": "https://www.galaxus.ch/de/s1/product/benq-screenbar-screenbar-11540288"
+        }
       ]
     },
     {
-      "id": "herr-der-ringe",
-      "title": "Der Herr der Ringe – illustrierte Ausgabe",
-      "brand": "J. R. R. Tolkien",
-      "category": "buecher",
-      "priority": 2,
-      "price": 69,
+      "id": "laser-messgeraet",
+      "title": "Laser-Messgerät",
+      "category": "technik",
       "shops": [
-        { "name": "Orell Füssli", "url": "https://www.orellfuessli.ch/suche?sq=Herr%20der%20Ringe%20illustriert" },
-        { "name": "Ex Libris", "url": "https://www.exlibris.ch/de/suche/?q=Herr%20der%20Ringe%20illustriert" }
+        {
+          "name": "Galaxus",
+          "url": "https://www.galaxus.ch/de/s4/product/bosch-professional-glm-50-27-c-50-m-635-nm-laserentfernungsmesser-14740136"
+        }
       ],
-      "related": ["notizbuch"]
+      "brand": "Bosch Professional GLM 50-27 C"
     },
     {
-      "id": "notizbuch",
-      "title": "Notizbuch A5, gepunktet",
-      "brand": "Leuchtturm1917",
-      "category": "buecher",
-      "priority": 3,
-      "price": 25,
-      "note": "Farbe egal – gerne Dunkelblau oder Grün.",
+      "id": "samyang-85",
+      "title": "Samyang AF 85mm f/1.4 FE II",
+      "brand": "Samyang · Sony E",
+      "category": "fotografie",
       "shops": [
-        { "name": "Galaxus", "url": "https://www.galaxus.ch/de/search?q=Leuchtturm1917%20A5%20dotted" }
+        {
+          "name": "Digitec",
+          "url": "https://www.digitec.ch/de/s1/product/samyang-af-85mm-f14-fe-ii-sony-e-sony-e-vollformat-objektiv-21580874"
+        }
+      ],
+      "related": [
+        "sigma-60-600"
       ]
     },
     {
-      "id": "kochbuch",
-      "title": "Schokolade – das Kochbuch",
-      "category": "kueche",
-      "priority": 3,
-      "price": 35,
+      "id": "sigma-60-600",
+      "title": "Sigma 60-600mm F4,5-6,3 DG DN OS | Sports",
+      "brand": "Sigma · Sony E",
+      "category": "fotografie",
       "shops": [
-        { "name": "Orell Füssli", "url": "https://www.orellfuessli.ch/suche?sq=Schokolade%20Kochbuch" }
+        {
+          "name": "Galaxus",
+          "url": "https://www.galaxus.ch/de/s1/product/sigma-60-600mm-f45-63-dg-dn-os-sports-sony-e-sony-e-vollformat-objektiv-23715752"
+        }
       ]
     },
     {
-      "id": "brettspiel",
-      "title": "Brettspiel für Spieleabende",
-      "brand": "Catan – Das Spiel",
-      "category": "freizeit",
-      "priority": 2,
-      "price": 45,
+      "id": "jacob-collier",
+      "title": "Jacob Collier – Konzert in der Schweiz",
+      "category": "konzerte",
       "shops": [
-        { "name": "Galaxus", "url": "https://www.galaxus.ch/de/search?q=Catan%20Basisspiel" },
-        { "name": "Franz Carl Weber", "url": "https://www.fcw.ch/de/search?q=Catan" }
+        {
+          "name": "Ticketcorner",
+          "url": "https://www.ticketcorner.ch/artist/jacob-collier"
+        }
+      ],
+      "related": [
+        "marc-broussard"
       ]
     },
     {
-      "id": "escape-room",
-      "title": "Escape-Room-Gutschein für 2 Personen",
-      "category": "erlebnisse",
-      "priority": 2,
-      "price": 80,
-      "note": "Gerne zusammen mit euch – das ist das eigentliche Geschenk!",
+      "id": "marc-broussard",
+      "title": "Marc Broussard – Konzert in der Schweiz",
+      "category": "konzerte",
       "shops": [
-        { "name": "Erlebnisgeschenke", "url": "https://www.erlebnisgeschenke.ch/suche?q=escape%20room" }
+        {
+          "name": "Stadtkonzerte",
+          "url": "https://stadtkonzerte.ch/artists/marc-broussard"
+        }
+      ]
+    },
+    {
+      "id": "de-toren-fusion-v",
+      "title": "De Toren Fusion V",
+      "brand": "Stellenbosch · Jahrgang 2020",
+      "category": "weine",
+      "note": "Ab 6 Flaschen CHF 49.50 pro Flasche.",
+      "shops": [
+        {
+          "name": "Kapweine",
+          "url": "https://shop.kapweine.ch/de-toren-fusion-v-ab-6-flaschen-49-50-chf-pro-flasche-2020",
+          "price": 49.5
+        }
+      ]
+    },
+    {
+      "id": "riesling-marbach",
+      "title": "Riesling «Marbach» trocken",
+      "brand": "Nahe · 2016",
+      "category": "weine",
+      "shops": [
+        {
+          "name": "Google Shopping",
+          "url": "https://www.google.com/search?tbm=shop&gl=ch&q=Riesling%20Marbach%20trocken%20Nahe%202016"
+        }
+      ]
+    },
+    {
+      "id": "lafaurie-peyraguey-sec",
+      "title": "Grand Vin Sec de Lafaurie-Peyraguey",
+      "brand": "AOC Bordeaux · 2023",
+      "category": "weine",
+      "shops": [
+        {
+          "name": "Google Shopping",
+          "url": "https://www.google.com/search?tbm=shop&gl=ch&q=Grand%20Vin%20Sec%20de%20Lafaurie-Peyraguey%202023"
+        }
+      ]
+    },
+    {
+      "id": "cederberg-cabernet",
+      "title": "Cederberg Cabernet Sauvignon – gereift",
+      "brand": "2018",
+      "category": "weine",
+      "shops": [
+        {
+          "name": "Google Shopping",
+          "url": "https://www.google.com/search?tbm=shop&gl=ch&q=Cederberg%20Cabernet%20Sauvignon%202018"
+        }
       ]
     }
   ]
