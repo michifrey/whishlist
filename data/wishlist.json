@@ -18,6 +18,11 @@
       "icon": "camera"
     },
     {
+      "id": "gadgets",
+      "label": "Gadgets",
+      "icon": "spark"
+    },
+    {
       "id": "konzerte",
       "label": "Konzerte",
       "icon": "music"
@@ -26,6 +31,11 @@
       "id": "weine",
       "label": "Weine",
       "icon": "wine"
+    },
+    {
+      "id": "restaurants",
+      "label": "Restaurantbesuche",
+      "icon": "dining"
     }
   ],
   "items": [
@@ -160,6 +170,27 @@
           "url": "https://www.google.com/search?tbm=shop&gl=ch&q=Cederberg%20Cabernet%20Sauvignon%202018"
         }
       ]
+    },
+    {
+      "id": "gadgets",
+      "title": "Coole Gadgets",
+      "brand": "Technik-Spielereien aller Art",
+      "category": "gadgets",
+      "note": "Ich mag Gadgets – überrascht mich gerne mit etwas Praktischem oder Verspieltem für Schreibtisch, Werkstatt oder unterwegs.",
+      "shops": [
+        {
+          "name": "Galaxus",
+          "url": "https://www.galaxus.ch/de/search?q=gadget"
+        }
+      ]
+    },
+    {
+      "id": "restaurant",
+      "title": "Restaurantbesuch zusammen",
+      "brand": "Gutschein oder Einladung",
+      "category": "restaurants",
+      "priority": 1,
+      "note": "Ein feines Essen zusammen mit euch ist für mich das schönste Geschenk – gerne als Einladung oder als Gutschein für ein gutes Restaurant."
     }
   ]
 }
