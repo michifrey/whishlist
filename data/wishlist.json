@@ -39,7 +39,8 @@
           "name": "Galaxus",
           "url": "https://www.galaxus.ch/de/s1/product/benq-screenbar-screenbar-11540288"
         }
-      ]
+      ],
+      "priority": 1
     },
     {
       "id": "laser-messgeraet",
@@ -51,7 +52,8 @@
           "url": "https://www.galaxus.ch/de/s4/product/bosch-professional-glm-50-27-c-50-m-635-nm-laserentfernungsmesser-14740136"
         }
       ],
-      "brand": "Bosch Professional GLM 50-27 C"
+      "brand": "Bosch Professional GLM 50-27 C",
+      "priority": 1
     },
     {
       "id": "samyang-85",
@@ -66,7 +68,8 @@
       ],
       "related": [
         "sigma-60-600"
-      ]
+      ],
+      "priority": 1
     },
     {
       "id": "sigma-60-600",
@@ -78,7 +81,8 @@
           "name": "Galaxus",
           "url": "https://www.galaxus.ch/de/s1/product/sigma-60-600mm-f45-63-dg-dn-os-sports-sony-e-sony-e-vollformat-objektiv-23715752"
         }
-      ]
+      ],
+      "priority": 1
     },
     {
       "id": "jacob-collier",
@@ -92,7 +96,8 @@
       ],
       "related": [
         "marc-broussard"
-      ]
+      ],
+      "priority": 1
     },
     {
       "id": "marc-broussard",
@@ -103,7 +108,8 @@
           "name": "Stadtkonzerte",
           "url": "https://stadtkonzerte.ch/artists/marc-broussard"
         }
-      ]
+      ],
+      "priority": 1
     },
     {
       "id": "de-toren-fusion-v",
