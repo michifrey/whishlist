@@ -1,7 +1,7 @@
 {
   "owner": "Michi",
   "year": 2026,
-  "updated": "2026-11-03",
+  "updated": "2026-11-04",
   "reservations": {
     "url": ""
   },
@@ -64,6 +64,33 @@
       ],
       "brand": "Bosch Professional GLM 50-27 C",
       "priority": 1
+    },
+    {
+      "id": "samsung-soundbar",
+      "title": "Soundbar",
+      "brand": "Samsung HW-Q990HEN · 11.1.4 Kanal",
+      "category": "technik",
+      "shops": [
+        {
+          "name": "Galaxus",
+          "url": "https://www.galaxus.ch/de/s1/product/samsung-hw-q990hen-756-w-1114-kanal-soundbar-69108291"
+        }
+      ]
+    },
+    {
+      "id": "logitech-mx-keypad",
+      "title": "Ziffernblock",
+      "brand": "Logitech MX Keypad",
+      "category": "technik",
+      "shops": [
+        {
+          "name": "Galaxus",
+          "url": "https://www.galaxus.ch/de/s1/product/logitech-mx-keypad-ohne-tastaturlayout-kabelgebunden-tastatur-72745068"
+        }
+      ],
+      "related": [
+        "benq-screenbar"
+      ]
     },
     {
       "id": "samyang-85",
