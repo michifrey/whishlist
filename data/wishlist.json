@@ -1,7 +1,7 @@
 {
   "owner": "Michi",
   "year": 2026,
-  "updated": "2026-11-04",
+  "updated": "2026-11-26",
   "reservations": {
     "url": ""
   },
@@ -208,6 +208,18 @@
         {
           "name": "Galaxus",
           "url": "https://www.galaxus.ch/de/search?q=gadget"
+        }
+      ]
+    },
+    {
+      "id": "inkposter-tela",
+      "title": "E-Ink Bilderrahmen",
+      "brand": "InkPoster Tela 28.5\"",
+      "category": "gadgets",
+      "shops": [
+        {
+          "name": "InkPoster",
+          "url": "https://inkposter.eu/products/inkposter-tela-28-5"
         }
       ]
     },
