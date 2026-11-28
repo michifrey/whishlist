@@ -1,7 +1,7 @@
 {
   "owner": "Michi",
   "year": 2026,
-  "updated": "2026-11-26",
+  "updated": "2026-11-28",
   "reservations": {
     "url": ""
   },
@@ -90,6 +90,18 @@
       ],
       "related": [
         "benq-screenbar"
+      ]
+    },
+    {
+      "id": "elgato-stream-deck-xl",
+      "title": "Stream Deck",
+      "brand": "Elgato Stream Deck XL",
+      "category": "technik",
+      "shops": [
+        {
+          "name": "Galaxus",
+          "url": "https://www.galaxus.ch/de/s1/product/elgato-stream-deck-xl-streaming-deck-67418113"
+        }
       ]
     },
     {
