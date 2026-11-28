@@ -105,6 +105,22 @@
       ]
     },
     {
+      "id": "sony-a7-v",
+      "title": "Sony Alpha 7 V",
+      "brand": "Sony · 33 MP Vollformat",
+      "category": "fotografie",
+      "shops": [
+        {
+          "name": "Galaxus",
+          "url": "https://www.galaxus.ch/de/s1/product/sony-alpha-7-v-33-mpx-vollformat-kamera-65367350"
+        }
+      ],
+      "related": [
+        "samyang-85",
+        "sigma-60-600"
+      ]
+    },
+    {
       "id": "samyang-85",
       "title": "Samyang AF 85mm f/1.4 FE II",
       "brand": "Samyang · Sony E",
