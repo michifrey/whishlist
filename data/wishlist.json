@@ -1,7 +1,7 @@
 {
   "owner": "Michi",
   "year": 2026,
-  "updated": "2026-11-26",
+  "updated": "2026-11-28",
   "reservations": {
     "url": ""
   },
@@ -90,6 +90,34 @@
       ],
       "related": [
         "benq-screenbar"
+      ]
+    },
+    {
+      "id": "elgato-stream-deck-xl",
+      "title": "Stream Deck",
+      "brand": "Elgato Stream Deck XL",
+      "category": "technik",
+      "shops": [
+        {
+          "name": "Galaxus",
+          "url": "https://www.galaxus.ch/de/s1/product/elgato-stream-deck-xl-streaming-deck-67418113"
+        }
+      ]
+    },
+    {
+      "id": "sony-a7-v",
+      "title": "Sony Alpha 7 V",
+      "brand": "Sony · 33 MP Vollformat",
+      "category": "fotografie",
+      "shops": [
+        {
+          "name": "Galaxus",
+          "url": "https://www.galaxus.ch/de/s1/product/sony-alpha-7-v-33-mpx-vollformat-kamera-65367350"
+        }
+      ],
+      "related": [
+        "samyang-85",
+        "sigma-60-600"
       ]
     },
     {
